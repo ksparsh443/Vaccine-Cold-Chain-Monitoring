@@ -1,0 +1,40 @@
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+import joblib
+
+# Load the data from the downloaded CSV file 'DATA-large.csv'
+data = pd.read_csv('/content/DATA-large.csv')
+
+# Extract features and target variable based on the columns in the CSV file
+X = data[['temperature', 'humidity', 'pressure', 'lux']]
+y = data['temperature']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train the Random Forest Regression model
+rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = rf_model.predict(X_test)
+
+# Calculate Mean Squared Error as a performance metric
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse}")
+
+# Now, you can use this model to predict temperature in real-time during transportation.
+# Whenever you get new sensor data from the end node, you can use rf_model.predict() to get the predicted temperature.
+
+# Example usage:
+new_data = np.array([[25.5, 60.0, 1012.3, 100]])  # Update the new_data array with corresponding values for temperature, humidity, pressure, and lux
+predicted_temperature = rf_model.predict(new_data)
+print(f"Predicted Temperature: {predicted_temperature[0]}")
+
+# Save the trained model to a file using joblib
+model_filename = '/content/rf_model.joblib'
+joblib.dump(rf_model, model_filename)
+print(f"Trained model saved to {model_filename}")
