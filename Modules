@@ -1,0 +1,17 @@
+!pip install numpy
+!pip install pandas
+!pip install scikit-learn
+!pip install joblib
+
+
+# Install required library to access Google Drive from Colab
+!pip install gdown
+
+import gdown
+
+# Provide the Google Drive file ID for 'DATA-large.CSV'
+file_id = '13STraJ_TlmhNoVKDlS6oRjW49l3OukUR'
+
+# Download the file
+output_file = 'DATA-large.csv'
+gdown.download(f'https://drive.google.com/uc?id={file_id}', output_file, quiet=False)
