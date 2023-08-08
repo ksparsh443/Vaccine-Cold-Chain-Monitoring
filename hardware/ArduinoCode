@@ -1,0 +1,64 @@
+3.	// Include necessary libraries
+#include <dht.h>
+
+// Pin definitions
+#define DHTPIN 2    // DH11 sensor data pin connected to digital pin 2
+#define FLAMEPIN 3  // Flame sensor data pin connected to digital pin 3
+#define LEDPIN 13   // Red LED connected to digital pin 13 (built-in LED on most Arduino boards)
+
+// Constants
+#define FLAME_THRESHOLD 800  // Adjust this threshold value for your flame sensor sensitivity
+#define TEMPERATURE_THRESHOLD 40  // Temperature threshold in degrees Celsius
+
+// Initialize DHT11 sensor
+dht DHT;
+
+void setup() {
+  pinMode(LEDPIN, OUTPUT);    // Set LED pin as output
+  pinMode(FLAMEPIN, INPUT);   // Set flame sensor pin as input
+  Serial.begin(9600);        // Start serial communication for debugging
+}
+
+void loop() {
+  // Read temperature and humidity from the DH11 sensor
+  int chk = DHT.read11(DHTPIN);
+  float temperature = DHT.temperature;
+
+  // Check if the DH11 sensor reading was successful
+  if (chk == DHTLIB_OK) {
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.println(" °C");
+
+    // Check if the temperature exceeds the threshold
+    if (temperature >= TEMPERATURE_THRESHOLD) {
+      // Blink the red LED
+      blinkLED(LEDPIN, 100, 5);  // Blink for 5 times with a 100ms interval
+    }
+  } else {
+    Serial.println("DH11 Read Error");
+  }
+
+  // Check for flame detection
+  int flameValue = analogRead(FLAMEPIN);
+
+  if (flameValue > FLAME_THRESHOLD) {
+    Serial.println("Flame Detected!");
+    // You can perform any action here if a flame is detected
+    // For example, sound an alarm, send an alert, etc.
+  }
+
+  // Add a delay to avoid reading the sensors too frequently
+  delay(2000);
+}
+
+// Function to blink the LED
+void blinkLED(int pin, int duration, int repeatCount) {
+  for (int i = 0; i < repeatCount; i++) {
+    digitalWrite(pin, HIGH);
+    delay(duration);
+    digitalWrite(pin, LOW);
+    delay(duration);
+  }
+}
+
