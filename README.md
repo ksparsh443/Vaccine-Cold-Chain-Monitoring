@@ -1,4 +1,4 @@
-# old-Chain-Vaccine-Monitoring
+# Cold-Chain-Vaccine-Monitoring
 
 ![image](https://github.com/ksparsh443/Vaccine-Cold-Chain-Monitoring/assets/84833857/734fb647-8d52-4905-bf51-72e9ffaef3b5)
 
